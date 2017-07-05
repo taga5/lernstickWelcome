@@ -28,6 +28,7 @@ import ch.fhnw.lernstickwelcome.fxmlcontroller.exam.PasswordChangeController;
 import ch.fhnw.lernstickwelcome.fxmlcontroller.ProgressController;
 import ch.fhnw.lernstickwelcome.fxmlcontroller.exam.FirewallDependenciesWarningController;
 import ch.fhnw.lernstickwelcome.fxmlcontroller.exam.FirewallPatternValidatorController;
+import ch.fhnw.lernstickwelcome.fxmlcontroller.standard.HwStatisticController;
 import ch.fhnw.lernstickwelcome.fxmlcontroller.standard.NonFreeSoftwareController;
 import ch.fhnw.lernstickwelcome.model.WelcomeConstants;
 import java.io.IOException;
@@ -68,12 +69,16 @@ public final class FXMLGuiLoader {
     private Scene welcomeApplicationFirewallDependenciesWarning;
     private Scene welcomeApplicationFirewallPatternValidator;
 
+    /* standard */
+    private Scene welcomeApplicationHwStatistic;
+
     // FXMLController
     private ProgressController progressController;
     private ErrorController errorController;
     private HelpController helpController;
 
     private PasswordChangeController passwordChangeController;
+    private HwStatisticController hwStatisticController;
     private BackupController backupController;
     private FirewallController firewallController;
     private ch.fhnw.lernstickwelcome.fxmlcontroller.exam.InformationController informationExamController;
@@ -107,6 +112,12 @@ public final class FXMLGuiLoader {
             mainController = main.getValue();
 
             if (!isExamEnvironment) {
+                // Load hwStatistic view.
+                Pair<Scene, HwStatisticController> hw
+                        = loadScene("/ch/fhnw/lernstickwelcome/view/standard/hardwareStatistic.fxml", stylesheet, rb);
+                welcomeApplicationHwStatistic = hw.getKey();
+                hwStatisticController = hw.getValue();
+
                 // prepare menu for standard env.
                 informationStdController = loadMenuItemView(
                         "/ch/fhnw/lernstickwelcome/view/standard/information.fxml",
@@ -264,6 +275,10 @@ public final class FXMLGuiLoader {
         return welcomeApplicationPasswordChange;
     }
 
+    public Scene getHwStatisticScene() {
+        return welcomeApplicationHwStatistic;
+    }
+
     /**
      * Returns the firewall dependencies warning dialog scene.
      *
@@ -370,6 +385,15 @@ public final class FXMLGuiLoader {
      *
      * @return
      */
+    public HwStatisticController getHwStatisticController() {
+        return hwStatisticController;
+    }
+
+    /**
+     * Returns the Controller for this fxml view.
+     *
+     * @return
+     */
     public FirewallPatternValidatorController getFirewallPatternValidatorController() {
         return firewallPatternValidatorController;
     }
@@ -421,18 +445,19 @@ public final class FXMLGuiLoader {
 
     /**
      * Loads an info text dialog with a specific action.
+     *
      * @param parent the parent stage
      * @param textid the id of the text for this dialog
      * @param e the action on ok
      * @return a modal info stage
-     * @throws IOException 
+     * @throws IOException
      */
-    public Stage getInfotextdialog(Stage parent, String textid, 
+    public Stage getInfotextdialog(Stage parent, String textid,
             EventHandler<ActionEvent> e) throws IOException {
         Pair<Scene, InfodialogController> p
                 = loadScene("/ch/fhnw/lernstickwelcome/view/infodialog.fxml", stylesheet, rb);
         p.getValue().initDialog(textid, e);
-        return createDialog(parent, p.getKey(), 
+        return createDialog(parent, p.getKey(),
                 rb.getString("welcomeApplicationInfodialog.title"), true);
     }
 

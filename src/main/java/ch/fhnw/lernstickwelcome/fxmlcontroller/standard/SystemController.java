@@ -50,6 +50,8 @@ public class SystemController implements Initializable {
     @FXML
     private ToggleSwitch tsDirectSound;
     @FXML
+    private ToggleSwitch tsStatistic;
+    @FXML
     private ToggleSwitch tsBlockKde;
     @FXML
     private TextField tfExchangePartition;
@@ -213,6 +215,10 @@ public class SystemController implements Initializable {
 
     public ToggleSwitch getTsDirectSound() {
         return tsDirectSound;
+    }
+    
+    public ToggleSwitch getTsStatistic() {
+        return tsStatistic;
     }
 
     public ToggleSwitch getTsBlockKde() {

@@ -48,6 +48,7 @@ public class SystemBinder {
     public void initBindings(){
         system.getTsBlockKde().selectedProperty().bindBidirectional(controller.getSysconf().blockKdeDesktopAppletsProperty());
         system.getTsDirectSound().selectedProperty().bindBidirectional(controller.getSysconf().directSoundOutputProperty());
+        system.getTsStatistic().selectedProperty().bindBidirectional(controller.getSysconf().statisticProperty());
         system.getTsShowWarning().selectedProperty().bindBidirectional(controller.getPartition().showReadOnlyInfoProperty());
         system.getTsStartWa().selectedProperty().bindBidirectional(controller.getPartition().showReadWriteWelcomeProperty());
         system.getCbVisibleFor().valueProperty().bindBidirectional(controller.getSysconf().timeoutSecondsProperty());

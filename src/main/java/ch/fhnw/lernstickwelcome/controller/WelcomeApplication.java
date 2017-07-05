@@ -25,6 +25,7 @@ import ch.fhnw.lernstickwelcome.controller.binder.MainBinder;
 import ch.fhnw.lernstickwelcome.controller.binder.ProgressBinder;
 import ch.fhnw.lernstickwelcome.controller.binder.exam.FirewallDependenciesWarningBinder;
 import ch.fhnw.lernstickwelcome.controller.binder.exam.FirewallPatternValidatorBinder;
+import ch.fhnw.lernstickwelcome.controller.binder.standard.HwStatisticBinder;
 import ch.fhnw.lernstickwelcome.util.FXMLGuiLoader;
 import ch.fhnw.lernstickwelcome.util.WelcomeUtil;
 import java.io.IOException;
@@ -64,6 +65,7 @@ public final class WelcomeApplication extends Application {
     private WelcomeController controller;
     private FXMLGuiLoader guiLoader;
     private Stage passwordChangeStage;
+    private Stage hwStatisticStage;
 
     /**
      * Initializes the stage.
@@ -165,7 +167,20 @@ public final class WelcomeApplication extends Application {
                 examSystemBinder.initHelp(helpStage, helpBinder);
             } else {
                 controller.loadStandardEnvironment();
-
+          
+                // Show statistic message on first startup
+                if (controller.getSysconf().showingHwStatisticMessage()) {
+                    HwStatisticBinder statisticBinder = new HwStatisticBinder(controller, guiLoader.getHwStatisticController());
+                    statisticBinder.initHandlers(errorStage, guiLoader.getErrorController());
+                    hwStatisticStage = FXMLGuiLoader.createDialog(
+                            primaryStage,
+                            guiLoader.getHwStatisticScene(),
+                            controller.getBundle().getString("welcomeApplicationHardwareStatistic.title"),
+                            false
+                    );
+                    hwStatisticStage.showAndWait();
+                }
+                
                 HelpBinder helpBinder = new HelpBinder(controller, guiLoader.getHelpController());
                 helpBinder.initBindings();
                 helpBinder.initHandlers();

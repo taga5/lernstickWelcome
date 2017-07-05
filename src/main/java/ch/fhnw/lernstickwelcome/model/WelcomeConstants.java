@@ -31,6 +31,7 @@ public final class WelcomeConstants {
     // PROPERTIES CONSTANTS
     public static final String PROPERTIES_PATH = "/etc/lernstickWelcome";
     public static final String SHOW_WELCOME = "ShowWelcome";
+    public static final String SEND_HW_STATISTIC = "SendHwStatistic";
     public static final String SHOW_READ_ONLY_INFO = "ShowReadOnlyInfo";
     public static final String BACKUP = "Backup";
     public static final String BACKUP_SOURCE = "BackupSource";
@@ -43,6 +44,7 @@ public final class WelcomeConstants {
     public static final String EXCHANGE_ACCESS = "ExchangeAccess";
     public static final String KDE_LOCK = "LockKDE";
     public static final String PASSWORD_CHANGED = "ShowPasswordDialog";
+    public static final String DISABLE_HW_STATISTIC_MESSAGE = "DisableHwStatisticMessage";
     
     // PATHS
     // !!! NO trailing slash at the end (would break comparison later) !!!

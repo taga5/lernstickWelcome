@@ -85,6 +85,7 @@ public class SystemconfigTask implements Processable<String> {
     // Some functions are only required in exam env.
     private boolean isExamEnv; // TODO Block functions for Std. Version
     private boolean passwordChanged;
+    private boolean showingHwStatisticMessage;
     private Partition bootConfigPartition;
     private Partition exchangePartition;
     private StorageDevice systemStorageDevice;
@@ -99,6 +100,7 @@ public class SystemconfigTask implements Processable<String> {
     private StringProperty username = new SimpleStringProperty();
     private BooleanProperty blockKdeDesktopApplets = new SimpleBooleanProperty();
     private BooleanProperty directSoundOutput = new SimpleBooleanProperty();
+    private BooleanProperty allowStatistic = new SimpleBooleanProperty();
     private BooleanProperty allowAccessToOtherFilesystems = new SimpleBooleanProperty();
     private MountInfo bootConfigMountInfo;
     private Properties properties;
@@ -116,8 +118,13 @@ public class SystemconfigTask implements Processable<String> {
 
         // Load properties
         blockKdeDesktopApplets.set("true".equals(properties.getProperty(WelcomeConstants.KDE_LOCK)));
-        if(isExamEnv)
+        if (isExamEnv) {
             passwordChanged = "true".equals(properties.getProperty(WelcomeConstants.PASSWORD_CHANGED));
+        } else {
+            // Invert disable property
+            showingHwStatisticMessage = !"true".equals(properties.getProperty(WelcomeConstants.DISABLE_HW_STATISTIC_MESSAGE));
+        }
+
         allowAccessToOtherFilesystems.set(WelcomeUtil.isFileSystemMountAllowed());
         // Load Sound Output
         directSoundOutput.set(!Files.exists(WelcomeConstants.ALSA_PULSE_CONFIG_FILE));
@@ -127,6 +134,9 @@ public class SystemconfigTask implements Processable<String> {
         getBootConfigInfos();
         // Load the Username
         getFullUserName();
+        // Load setting for statistic
+        allowStatistic.set("true".equals(
+                properties.getProperty(WelcomeConstants.SEND_HW_STATISTIC)));
     }
 
     /**
@@ -797,12 +807,44 @@ public class SystemconfigTask implements Processable<String> {
         return directSoundOutput;
     }
 
+    public BooleanProperty statisticProperty() {
+        return allowStatistic;
+    }
+
     public BooleanProperty allowAccessToOtherFilesystemsProperty() {
         return allowAccessToOtherFilesystems;
     }
 
     public boolean isPasswordChanged() {
         return passwordChanged;
+    }
+
+    public boolean showingHwStatisticMessage() {
+        return showingHwStatisticMessage;
+    }
+
+    public void allowHwStatistic() {
+        try {
+            PROCESS_EXECUTOR.executeScript("systemctl enable hardwareStatistic.timer");
+        } catch (IOException ex) {
+            Logger.getLogger(SystemconfigTask.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        allowStatistic.set(true);
+        properties.setProperty(WelcomeConstants.SEND_HW_STATISTIC, "true");
+    }
+
+    public void denyHwStatistic() {
+        try {
+            PROCESS_EXECUTOR.executeScript("systemctl disable hardwareStatistic.timer");
+        } catch (IOException ex) {
+            Logger.getLogger(SystemconfigTask.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        allowStatistic.set(false);
+        properties.setProperty(WelcomeConstants.SEND_HW_STATISTIC, "false");
+    }
+
+    public void disableShowHwStatistic() {
+        properties.setProperty(WelcomeConstants.DISABLE_HW_STATISTIC_MESSAGE, "true");
     }
 
     @Override
@@ -868,9 +910,17 @@ public class SystemconfigTask implements Processable<String> {
             properties.setProperty(WelcomeConstants.KDE_LOCK,
                     blockKdeDesktopApplets.get() ? "true" : "false");
 
+            // Check if statistic value has changed
+            if ("true".equals(properties.getProperty(WelcomeConstants.SEND_HW_STATISTIC)) != allowStatistic.get()) {
+                if (allowStatistic.get()) 
+                    allowHwStatistic();
+                else 
+                    denyHwStatistic();  
+            }
+
             updateProgress(5, 6);
             // Change password should only be run in exam env.
-            if(isExamEnv) {
+            if (isExamEnv) {
                 updateMessage("SystemconfigTask.password");
 
                 // Update password

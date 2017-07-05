@@ -14,62 +14,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.fhnw.lernstickwelcome.fxmlcontroller.exam;
+package ch.fhnw.lernstickwelcome.fxmlcontroller.standard;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 
 /**
  * FXML Controller class
  */
-public class PasswordChangeController implements Initializable {
+public class HwStatisticController implements Initializable {
 
     @FXML
-    private Button cancelButton;
+    private Button noButton;
     @FXML
-    private Button okButton;
-    @FXML
-    private PasswordField newPasswordField;
-    @FXML
-    private PasswordField repeatPasswordField;
+    private Button yesButton;
+
+
+    public Button getYesButton() {
+        return yesButton;
+    }
+
+    public Button getNoButton() {
+        return noButton;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
-        okButton.disableProperty().bind(
-                newPasswordField.textProperty().isEmpty().or(
-                        repeatPasswordField.textProperty().isEmpty()));
-
-        Platform.runLater(() -> {
-            newPasswordField.requestFocus();
-        });
-    }
-
-    @FXML
-    void newPasswordFieldAction(ActionEvent event) {
-        repeatPasswordField.requestFocus();
-    }
-
-    public Button getOkButton() {
-        return okButton;
-    }
-
-    public Button getCancelButton() {
-        return cancelButton;
-    }
-
-    public TextField getNewPasswordField() {
-        return newPasswordField;
-    }
-
-    public TextField getRepeatPasswordField() {
-        return repeatPasswordField;
     }
 }

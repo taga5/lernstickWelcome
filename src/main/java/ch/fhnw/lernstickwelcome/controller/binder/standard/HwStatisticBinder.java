@@ -14,12 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.fhnw.lernstickwelcome.controller.binder.exam;
+package ch.fhnw.lernstickwelcome.controller.binder.standard;
 
 import ch.fhnw.lernstickwelcome.controller.WelcomeController;
 import ch.fhnw.lernstickwelcome.controller.exception.ProcessingException;
 import ch.fhnw.lernstickwelcome.fxmlcontroller.ErrorController;
-import ch.fhnw.lernstickwelcome.fxmlcontroller.exam.PasswordChangeController;
+import ch.fhnw.lernstickwelcome.fxmlcontroller.standard.HwStatisticController;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 
@@ -29,20 +29,20 @@ import javafx.stage.Stage;
  *
  * @author sschw
  */
-public class PasswordChangeBinder {
+public class HwStatisticBinder {
 
-    private final PasswordChangeController password;
+    private final HwStatisticController hwStatistic;
     private final WelcomeController controller;
 
     /**
      * Constructor of ExamInformationBinder class
      *
      * @param controller is needed to provide access to the backend properties
-     * @param password FXML controller which prviedes the view properties
+     * @param hwStatistic FXML controller which prviedes the view properties
      */
-    public PasswordChangeBinder(WelcomeController controller,
-            PasswordChangeController password) {
-        this.password = password;
+    public HwStatisticBinder(WelcomeController controller,
+            HwStatisticController hwStatistic) {
+        this.hwStatistic = hwStatistic;
         this.controller = controller;
     }
 
@@ -54,28 +54,22 @@ public class PasswordChangeBinder {
      */
     public void initHandlers(Stage errorStage, ErrorController error) {
         
-        password.getOkButton().setOnAction(evt -> {
+        hwStatistic.getYesButton().setOnAction(evt -> {
+            controller.getSysconf().allowHwStatistic();
+            controller.getSysconf().disableShowHwStatistic();
             
-            controller.getSysconf().passwordProperty().setValue(
-                    password.getNewPasswordField().getText());
-            controller.getSysconf().passwordRepeatProperty().setValue(
-                    password.getRepeatPasswordField().getText());
-            
-            try {
-                controller.getSysconf().changePassword();
-                controller.getProperties().newTask().run();
-                ((Stage) ((Node) evt.getSource()).getScene().getWindow()).close();
-            } catch (ProcessingException ex) {
-                error.initErrorMessage(ex);
-                errorStage.showAndWait();
-            }
+            // Save changes
+            controller.getProperties().newTask().run();
+            ((Stage) ((Node) evt.getSource()).getScene().getWindow()).close();
         });
         
-        // If user clicks on ignore remove the already tried passwords.
-        password.getCancelButton().setOnAction(evt
-                -> {
-            controller.getSysconf().passwordProperty().setValue(null);
-            controller.getSysconf().passwordRepeatProperty().setValue(null);
+        // Set flag that it does not show anymore
+        hwStatistic.getNoButton().setOnAction(evt -> {
+            controller.getSysconf().denyHwStatistic();
+            controller.getSysconf().disableShowHwStatistic();
+            
+            // Save chagnes
+            controller.getProperties().newTask().run();
             ((Stage) ((Node) evt.getSource()).getScene().getWindow()).close();
         });
     }

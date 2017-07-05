@@ -4,35 +4,15 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox minHeight="10.0" minWidth="10.0" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.fhnw.lernstickwelcome.fxmlcontroller.exam.PasswordChangeController">
+<VBox minHeight="10.0" minWidth="10.0" prefHeight="136.0" prefWidth="404.0" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.72" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.fhnw.lernstickwelcome.fxmlcontroller.standard.HwStatisticController">
    <children>
-      <Label maxWidth="1.7976931348623157E308" prefWidth="300.0" text="%welcomeApplicationPasswordChange.informationText" wrapText="true" VBox.vgrow="ALWAYS" />
-      <GridPane hgap="10.0" maxWidth="1.7976931348623157E308" vgap="10.0" VBox.vgrow="ALWAYS">
-        <columnConstraints>
-          <ColumnConstraints />
-          <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints />
-          <RowConstraints />
-        </rowConstraints>
-         <children>
-            <Label text="%welcomeApplicationSystem.newPassword1" />
-            <Label text="%welcomeApplicationSystem.newPassword2" GridPane.rowIndex="1" />
-            <PasswordField fx:id="newPasswordField" onAction="#newPasswordFieldAction" GridPane.columnIndex="1" />
-            <PasswordField fx:id="repeatPasswordField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-         </children>
-      </GridPane>
+      <Label maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="384.0" text="%welcomeApplicationHardwareStatistic.informationText" wrapText="true" VBox.vgrow="ALWAYS" />
       <ButtonBar>
         <buttons>
-          <Button fx:id="cancelButton" cancelButton="true" mnemonicParsing="false" text="%welcomeApplicationPasswordChange.cancel" ButtonBar.buttonData="RIGHT" />
-          <Button fx:id="okButton" defaultButton="true" mnemonicParsing="false" text="%welcomeApplicationPasswordChange.ok" ButtonBar.buttonData="RIGHT" />
+          <Button fx:id="yesButton" defaultButton="true" mnemonicParsing="false" prefHeight="26.0" text="%welcomeApplicationInfodialog.ok" ButtonBar.buttonData="RIGHT" />
+          <Button fx:id="noButton" cancelButton="true" minWidth="31.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="363.0" text="%welcomeApplicationInfodialog.cancel" ButtonBar.buttonData="RIGHT" />
         </buttons>
       </ButtonBar>
    </children>
